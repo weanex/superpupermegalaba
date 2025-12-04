@@ -38,12 +38,69 @@ java {
     }
 }
 
-application {
-    // Define the main class for the application.
-    mainClass = 'superpupermegalaba.RestaurantOrderApp'
+// НАСТРОЙКИ КОДИРОВКИ ДЛЯ РУССКОГО ТЕКСТА
+compileJava.options.encoding = 'UTF-8'
+compileTestJava.options.encoding = 'UTF-8'
+javadoc.options.encoding = 'UTF-8'
+
+tasks.withType(JavaCompile) {
+    options.encoding = 'UTF-8'
+}
+
+tasks.withType(Test) {
+    systemProperty "file.encoding", "UTF-8"
+}
+
+run {
+    systemProperty "file.encoding", "UTF-8"
 }
 
 tasks.named('test') {
     // Use JUnit Platform for unit tests.
     useJUnitPlatform()
+    systemProperty "file.encoding", "UTF-8"
+}
+
+application {
+    // Define the main class for the application.
+    mainClass = 'lab.Main'
+    // JVM аргументы для корректного отображения русского текста
+    applicationDefaultJvmArgs = ["-Dfile.encoding=UTF-8", "-Dconsole.encoding=UTF-8"]
+}
+
+// Дополнительные задачи для запуска отдельных заданий
+task runN1(type: JavaExec) {
+    group = 'application'
+    description = 'Run Task 1 only'
+    classpath = sourceSets.main.runtimeClasspath
+    mainClass = 'lab.n1.N1'
+    systemProperty "file.encoding", "UTF-8"
+    jvmArgs = ["-Dfile.encoding=UTF-8"]
+}
+
+task runN2(type: JavaExec) {
+    group = 'application'
+    description = 'Run Task 2 only'
+    classpath = sourceSets.main.runtimeClasspath
+    mainClass = 'lab.n2.MainN2'
+    systemProperty "file.encoding", "UTF-8"
+    jvmArgs = ["-Dfile.encoding=UTF-8"]
+}
+
+task runN3(type: JavaExec) {
+    group = 'application'
+    description = 'Run Task 3 only'
+    classpath = sourceSets.main.runtimeClasspath
+    mainClass = 'lab.n3.MaiN3'
+    systemProperty "file.encoding", "UTF-8"
+    jvmArgs = ["-Dfile.encoding=UTF-8"]
+}
+
+// Задача для очистки и пересборки
+task cleanBuild(type: Delete) {
+    group = 'build'
+    description = 'Clean and build project'
+    dependsOn clean
+    dependsOn build
+    tasks.findByName('build').mustRunAfter('clean')
 }
